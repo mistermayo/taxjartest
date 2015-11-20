@@ -1,0 +1,35 @@
+<div class="row fill">
+  <div class="col-md-12 " id='map'></div>
+</div>
+
+<script>
+$(document).ready(function() {
+  L.mapbox.accessToken = '<%= ENV['MAPBOX_API'] %>';
+  var map = L.mapbox.map('map', '<%= ENV['MAPBOX_ID'] %>').setView([38.491, -90.38], 4);
+  // var featureLayer = L.mapbox.featureLayer()
+  //     .loadURL('/map.json')
+  //     .addTo(map);
+
+  var myLayer = L.mapbox.featureLayer().addTo(map);
+
+  myLayer.on('layeradd', function(e) {
+    var marker, popupContent, properties;
+    marker = e.layer;
+    properties = marker.feature.properties;
+    popupContent = '<div class="popup"><h3>' + properties.title + '</h3><p class="popup-num">Temperature. ' + properties.temperature + '</p><p>' + properties.summary + '</p></div>';
+    return marker.bindPopup(popupContent, {
+      closeButton: false,
+      minWidth: 300
+    });
+  });
+  $.ajax({
+    dataType: 'text',
+    url: '/map.json',
+    success: function(data) {
+      var geojson;
+      geojson = $.parseJSON(data);
+      return myLayer.setGeoJSON(geojson);
+    }
+  });
+});
+</script>

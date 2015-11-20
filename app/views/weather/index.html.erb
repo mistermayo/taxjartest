@@ -1,0 +1,21 @@
+<h1>Today</h1>
+<div class="row">
+<% @team_weather.reports.each do |loc| %>
+
+<div class="col-md-4">
+  <div class="weather-tile">
+    <p><%= "#{loc.person} (#{loc.coords})" %></p>
+    <h2><i class="wi wi-thermometer"></i> <%= loc.temperature %> <i class="wi wi-fahrenheit"></i></h2>
+    <h3><i class="wi wi-forecast-io-<%= loc.icon %> large"></i> <%= loc.summary %></h3>
+    <p><i class="wi wi-forecast-io-<%= loc.hourly_icon %>"></i> <%= loc.hourly_summary %></p>
+  </div>
+</div>
+
+<% end %>
+
+<% if @team_weather.reports.empty? %>
+
+<p>No weather report available. Make sure your API key is correct!</p>
+
+<% end %>
+</div>
